@@ -1,0 +1,38 @@
+.Dialog1 {
+    width: 400px;
+    height: 400px;
+    background-color: lightblue;
+    border: 3px solid grey;
+    position: absolute;
+    cursor: move;
+    top: 250px;
+    left: 620px;
+}
+
+.hidden {
+    display: none;
+}
+
+.DialogTitle {
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid grey;
+}
+
+.Contents {
+    padding-top: 50px;
+    padding-bottom: 200px;
+}
+
+.closeButton {
+    font-size: 12px;
+    width: 100px;
+    color: black;
+    border: 2px solid black;
+    border-radius: 25px;
+    padding: 10px;
+    margin: 10px;
+    margin-left: 140px;
+    cursor: pointer;
+}
