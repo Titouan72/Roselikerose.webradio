@@ -241,14 +241,19 @@ import './Dialog1.css';
 
 import React, { useState, useEffect } from "react";
 import VolumeUp from "@mui/icons-material/VolumeUp";
-import Slider from "@mui/material/Slider";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import InfoIcon from "@mui/icons-material/Info";
 import ChatIcon from "@mui/icons-material/Chat";
+import { DialogTitle } from '@mui/material';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import CloseIcon from '@mui/icons-material/Close';
+import Slider, { SliderThumb } from '@mui/material/Slider';
+import { styled } from '@mui/material/styles';
 
-const Dialog1 = () => {
+const Dialog1 = (props) => {
     console.log("hScreen " + window.innerHeight);
     console.log("wScreen " + window.innerWidth);
     var hScreen = window.innerHeight;
@@ -268,10 +273,13 @@ const Dialog1 = () => {
     const [chat, setChat] = React.useState(false);
     const [screenType, setScreenType] = React.useState("big");
     const [isFirstSong, setIsFirstSong] = React.useState(true);
-
+    const [dragging, setDragging] = React.useState(false);
+    const [diffY, setDiffY] = React.useState(0);
+    const [diffX, setDiffX] = React.useState(0);
     const [fastSeeker, setFastSeeker] = React.useState();
     const [actualArtist, setActualArtist] = React.useState("Unknown");
     const [actualSongname, setActualSongname] = React.useState("Unknown");
+    const [styles, setStyles] = React.useState({});
     const [background, setBackground] = React.useState(
         "url('" + defaultBg + "')"
     );
@@ -296,6 +304,28 @@ const Dialog1 = () => {
         }
     };
 
+
+    const _dragStart = (e) => {
+        setDiffX(e.screenX - e.currentTarget.getBoundingClientRect().left)
+        setDiffY(e.screenY - e.currentTarget.getBoundingClientRect().top)
+        setDragging(true)
+    }
+
+    const _dragging = (e) => {
+
+        if (dragging) {
+            var left = e.screenX - diffX;
+            var top = e.screenY - diffY;
+            setStyles({
+                left: left,
+                top: top
+            })
+        }
+    }
+
+    const _dragEnd = () => {
+        setDragging(false)
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     const audioTuneToPlay = actualMusic;
     console.log(typeof (audioTuneToPlay))
@@ -390,6 +420,78 @@ const Dialog1 = () => {
         }, 7000);
     };
 
+    const iOSBoxShadow =
+        '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
+
+    const marks = [
+        {
+            value: 0,
+        },
+        {
+            value: 25,
+        },
+        {
+            value: 50,
+        },
+        {
+            value: 75,
+        },
+        {
+            value: 100,
+        },
+    ];
+
+    const IOSSlider = styled(Slider)(({ theme }) => ({
+        color: theme.palette.mode === 'dark' ? '#3880ff' : '#3880ff',
+        height: 2,
+        padding: '15px 0',
+        '& .MuiSlider-thumb': {
+            height: 28,
+            width: 28,
+            backgroundColor: '#fff',
+            boxShadow: iOSBoxShadow,
+            '&:focus, &:hover, &.Mui-active': {
+                boxShadow:
+                    '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)',
+                // Reset on touch devices, it doesn't add specificity
+                '@media (hover: none)': {
+                    boxShadow: iOSBoxShadow,
+                },
+            },
+        },
+        '& .MuiSlider-valueLabel': {
+            fontSize: 12,
+            fontWeight: 'normal',
+            top: -6,
+            backgroundColor: 'unset',
+            color: theme.palette.text.primary,
+            '&:before': {
+                display: 'none',
+            },
+            '& *': {
+                background: 'transparent',
+                color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+            },
+        },
+        '& .MuiSlider-track': {
+            border: 'none',
+        },
+        '& .MuiSlider-rail': {
+            opacity: 0.5,
+            backgroundColor: '#bfbfbf',
+        },
+        '& .MuiSlider-mark': {
+            backgroundColor: '#bfbfbf',
+            height: 8,
+            width: 1,
+            '&.MuiSlider-markActive': {
+                opacity: 1,
+                backgroundColor: 'currentColor',
+            },
+        },
+    }));
+
+
     const muteSound = async () => {
         await setShowPlayOrPause("third");
         await setVolume(0);
@@ -420,283 +522,94 @@ const Dialog1 = () => {
             setChat(true);
         }
     };
+
+    var classes = props.show ? 'Dialog1' : 'Dialog1 hidden';
     if (screenType == "big") {
         return (
             <div
-                style={{
-                    backgroundImage: background,
-                    height: "100vh",
-                    margin: "-8px",
-                    fontSize: "50px",
-                    overflow: "hidden",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    zIndex: "100",
-                }}
                 onLoad={checkScreenSize}
                 id="test"
+                className={classes} style={styles} onMouseDown={_dragStart} onMouseMove={_dragging} onMouseUp={_dragEnd}
             >
-                <div
-                    style={{
-                        backgroundColor: "black",
-                        color: "white",
-                        position: "fixed",
-                        bottom: "0",
-                        zIndex: "12",
-                        height: "5%",
-                        width: "20%",
-                        right: "0",
-                    }}
-                >
-                    <Grid container spacing={0}>
-                        <Grid item xs={6}>
-                            <Button
-                                variant="text"
-                                style={{ color: "white", top: "-15%", marginLeft: "50px" }}
-                                onClick={chatJob}
-                            >
-                                <ChatIcon />
-                            </Button>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Button
-                                variant="text"
-                                style={{ color: "white", top: "-15%", marginLeft: "50px" }}
-                                onClick={sidebarJob}
-                            >
-                                <InfoIcon />
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </div>
-                <div
-                    style={{
-                        backgroundColor: "white",
-                        color: "black",
-                        position: "fixed",
-                        bottom: "0",
-                        left: "0",
-                        zIndex: "13",
-                        height: "7%",
-                        width: "20%",
-                        right: "0",
-                        top: "55%",
-                    }}
-                >
+                <div classes={DialogTitle} style={{ borderBottom: '4px solid #FFEB01' }}>
                     <marquee
                         behavior="scroll"
                         style={{
                             marginLeft: "15px",
                             marginRight: "15px",
-                            fontFamily: "system-ui",
+                            fontFamily: "courrier-new",
                             fontSize: "25px",
-                            fontStyle: "italic",
-                            fontWeight: "900",
+                            fontWeight: "50",
+                            color: '#FFEB01',
+                            fontFamily: 'Enriqueta'
                         }}
                     >
-                        Song {actualSongname} from {actualArtist}
+                        SONG {actualSongname.toUpperCase()} FROM {actualArtist.toUpperCase()}
                     </marquee>
                 </div>
-                <div
-                    style={{
-                        backgroundColor: "black",
-                        color: "white",
-                        position: "fixed",
-                        bottom: "0",
-                        left: "50px",
-                        zIndex: "13",
-                        height: "7%",
-                        width: "4%",
-                        right: "1",
-                        top: "0",
-                    }}
-                >
-                    <img
-                        src="https://c.tenor.com/U-ttF4Ohd8cAAAAM/kassadin-kassa-jam.gif"
-                        height="50px"
-                        style={{ left: "13px", position: "relative", top: "8px" }}
-                    ></img>
-                </div>
-                <div
-                    style={{
-                        backgroundColor: "black",
-                        color: "white",
-                        position: "fixed",
-                        bottom: "0",
-                        left: "127px",
-                        zIndex: "13",
-                        height: "7%",
-                        width: "4%",
-                        right: "1",
-                        top: "0",
-                        cursor: "none",
-                    }}
-                >
-                    <p id="rec" style={{ color: rec == false ? "white" : "red" }}>
-                        •
-                    </p>
-                </div>
-                {showPlayOrPause == "first" && (
-                    <button
-                        style={{
-                            backgroundColor: "black",
-                            color: "white",
-                            position: "fixed",
-                            bottom: "0",
-                            left: "0",
-                            zIndex: "12",
-                            height: "40%",
-                            width: "20%",
-                            right: "0",
-                        }}
-                        id="work"
-
-                        class="buttonNeon"
-                        onClick={playSound}
-                    >
-                        {/* <VolumeOffIcon style={{ fontSize: "110px", color: 'white'}}  /> */}
-                        <p
-                            class="buttonNeon"
-                            style={{
-                                fontSize: "50px",
-                                color: "white",
-                                textShadow: "0 0 50px #FFFFFF",
-                            }}
-                        >
-                            TURNED OFF
-                        </p>
-                    </button>
-                )}
-                {showPlayOrPause == "second" && (
-                    <button
-                        style={{
-                            backgroundColor: "black",
-                            color: "white",
-                            position: "fixed",
-                            bottom: "0",
-                            left: "0",
-                            zIndex: "12",
-                            height: "40%",
-                            width: "20%",
-                            right: "0",
-                        }}
-                        onClick={muteSound}
-                    >
-                        {/* <VolumeUpIcon style={{ fontSize: "110px" }} /> */}
-                        {wait == false && (
-                            <p
-                                class="buttonNeon"
-                                style={{
-                                    fontSize: "50px",
-                                    color: "white",
-                                    textShadow: "0 0 50px #FFFFFF",
-                                }}
-                            >
-                                TURNED ON
-                            </p>
-                        )}
-                        {wait == true && (
-                            <p
-                                style={{
-                                    fontSize: "20px",
-                                    color: "white",
-                                    cursor: "wait",
-                                    textShadow: "0 0 50px #FFFFFF",
-                                    fontStyle: "italic",
-                                }}
-                            >
-                                Turning on...
-                            </p>
-                        )}
-                    </button>
-                )}
-                {showPlayOrPause == "third" && (
-                    <button
-                        style={{
-                            backgroundColor: "black",
-                            color: "white",
-                            position: "fixed",
-                            bottom: "0",
-                            left: "0",
-                            zIndex: "12",
-                            height: "40%",
-                            width: "20%",
-                            right: "0",
-                        }}
-                        id="work"
-                        onClick={resumeSound}
-                    >
-                        {/* <VolumeOffIcon style={{ fontSize: "110px" }} /> */}
-                        <p
-                            class="buttonNeon"
-                            style={{
-                                fontSize: "50px",
-                                color: "white",
-                                textShadow: "0 0 50px #FFFFFF",
-                            }}
-                        >
-                            TURNED OFF
-                        </p>
-                    </button>
-                )}
-
-                <div
-                    style={{
-                        background: "black",
-                        width: "50%",
-                        position: "fixed",
-                        top: "40%",
-                        left: "25%",
-                        paddingRight: "20px",
-                        paddingLeft: "20px",
-                    }}
-                >
-                    <Grid container spacing={0}>
-                        <Grid item xs={1}>
-                            <VolumeUp
-                                style={{ color: "white", position: "relative", top: "-4px" }}
-                            />
-                        </Grid>
-                        <Grid item xs={11}>
-                            <Slider
-                                style={{ width: "97%", color: "white" }}
-                                value={typeof value === "number" ? value : 0}
-                                onChange={handleSliderChange}
-                                aria-labelledby="input-slider"
-                            />
+                <Grid container spacing={0}>
+                    <Grid item xs={2}>
+                        <div style={{ color: '#FFEB01', marginTop: '15px' }} onClick={props.onClose}>
+                            <CloseIcon style={{ border: '2px solid #FFEB01' }} />
+                        </div>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Grid container spacing={0}>
+                            <Grid item xs={12}>
+                                <IOSSlider
+                                    style={{ marginTop: '15px', color: '#FFEB01' }}
+                                    value={typeof value === "number" ? value : 0}
+                                    onChange={handleSliderChange}
+                                    aria-label="ios slider"
+                                    valueLabelDisplay="on"
+                                    marks={marks}
+                                />
+                            </Grid>
                         </Grid>
                     </Grid>
-                </div>
+                    <Grid item xs={2}>
+                        {showPlayOrPause == "first" && (
+                            <button
+                                id="work"
+                                style={{ background: 'transparent', border: 'none' }}
+                                class="buttonNeon"
+                                onClick={playSound}
+                            >
+                                {/* <VolumeOffIcon style={{ fontSize: "110px", color: 'white'}}  /> */}
+                                <PlayArrowIcon style={{ color: '#FFEB01', fontSize: '50px', height: '60px' }} />
+                            </button>
+                        )}
+                        {showPlayOrPause == "second" && (
+                            <button
+                                style={{ background: 'transparent', border: 'none' }}
+                                onClick={muteSound}
+                            >
+                                {/* <VolumeUpIcon style={{ fontSize: "110px" }} /> */}
+                                {wait == false && (
+                                    <StopIcon style={{ color: '#FFEB01', fontSize: '50px', height: '60px' }} />
+                                )}
+                                {wait == true && (
+                                    <p
+                                        style={{ color: '#FFEB01' }}
+                                    >
+                                        Turning on...
+                                    </p>
+                                )}
+                            </button>
+                        )}
+                        {showPlayOrPause == "third" && (
+                            <button
+                                id="work"
+                                onClick={resumeSound}
+                                style={{ background: 'transparent', border: 'none' }}
+                            >
+                                {/* <VolumeOffIcon style={{ fontSize: "110px" }} /> */}
+                                <PlayArrowIcon style={{ color: '#FFEB01', fontSize: '50px', height: '60px' }} />
+                            </button>
+                        )}
+                    </Grid>
+                </Grid>
 
-                {/* ////////////////////////////////////////////////////////////BEGINING OF POMODORO///////////////////////////////////////////////////
-      <button
-        style={{
-          backgroundColor: "black",
-          color: "white",
-          position: "fixed",
-          top: "0",
-          zIndex: "12",
-          height: "20%",
-          width: "30%",
-          right: "0",
-        }}
-      >
-        <Grid container spacing={0}>
-          <Grid item xs={8}>
-            <div id="timer">
-              <div id="time">
-                <span id="minutes">25</span>
-                <span id="colon">:</span>
-                <span id="seconds">00</span>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={4}>
-            <p style={{ marginTop: "70px" }}>{valueTime}</p>
-          </Grid>
-        </Grid>
-      </button> 
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
             </div>
         );
     }
@@ -720,7 +633,6 @@ const Dialog1 = () => {
                         class="buttonNeon"
                         onClick={playSound}
                     >
-                        {/* <VolumeOffIcon style={{ fontSize: "110px", color: 'white'}}  /> */}
                         <p
                             class="buttonNeon"
 
@@ -733,7 +645,6 @@ const Dialog1 = () => {
                     <button
                         onClick={muteSound}
                     >
-                        {/* <VolumeUpIcon style={{ fontSize: "110px" }} /> */}
                         {wait == false && (
                             <p
                                 class="buttonNeon"

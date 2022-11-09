@@ -9,7 +9,7 @@ export default class MainApp extends Component {
         super(props);
 
         this.state = {
-            showDialog1: false,
+            showDialog1: true,
             showDialog2: false,
             showDialog3: false,
         }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Dialog2.css';
+import Grid from "@mui/material/Grid";
 
 export default class Dialog2 extends Component {
     constructor(props) {
@@ -27,10 +28,10 @@ export default class Dialog2 extends Component {
 
     _dragging(e) {
 
-        if(this.state.dragging) {
+        if (this.state.dragging) {
             var left = e.screenX - this.state.diffX;
             var top = e.screenY - this.state.diffY;
-    
+
             this.setState({
                 styles: {
                     left: left,
@@ -38,7 +39,7 @@ export default class Dialog2 extends Component {
                 }
             });
         }
-    }    
+    }
 
     _dragEnd() {
         this.setState({
@@ -50,16 +51,12 @@ export default class Dialog2 extends Component {
         var classes = this.props.show ? 'Dialog2' : 'Dialog2 hidden';
         return (
             <div className={classes} style={this.state.styles} onMouseDown={this._dragStart} onMouseMove={this._dragging} onMouseUp={this._dragEnd}>
-                <div className='DialogTitle'>My Dialog2</div>
-                <div className='Contents'>
-                    Contents of the Dialog 1: 
-                        - one
-                        - two
-                        - three 
-                </div>
-                <div className='closeButton' onClick={this.props.onClose}>
-                    Close
-                </div>
+                <div className='DialogTitle2' style={{color: '#FFEB01'}}>ROSELIKEROSE</div>
+                <Grid container spacing={0} style={{color: 'white'}}>
+                    <Grid item xs={12}>
+titouan
+                    </Grid>
+                </Grid>
             </div>
         );
     }
