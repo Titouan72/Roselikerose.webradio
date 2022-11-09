@@ -252,10 +252,9 @@ import StopIcon from '@mui/icons-material/Stop';
 import CloseIcon from '@mui/icons-material/Close';
 import Slider, { SliderThumb } from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 
 const Dialog1 = (props) => {
-    console.log("hScreen " + window.innerHeight);
-    console.log("wScreen " + window.innerWidth);
     var hScreen = window.innerHeight;
     var wScreen = window.innerWidth;
     var rdmNb = Math.floor(Math.random() * 3);
@@ -328,7 +327,7 @@ const Dialog1 = (props) => {
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     const audioTuneToPlay = actualMusic;
-    console.log(typeof (audioTuneToPlay))
+    console.log(audioTuneToPlay)
     if (audioTuneToPlay != null) {
         //audioTuneToPlay.currentTime = 200
         audioTuneToPlay.play();
@@ -374,6 +373,7 @@ const Dialog1 = (props) => {
 
         for (let x = 0; x < 10; x++) {
             for (let i = 0; i < arrayDataShuffled.length; i++) {
+                console.log(timerArray);
                 timer = timerArray.reduce((a, b) => {
                     return a + b;
                 });
@@ -382,7 +382,6 @@ const Dialog1 = (props) => {
                 audioTune.load();
                 if (i == 0) {
                     setActualMusic(audioTune);
-                    setBackground("url('" + arrayDataShuffled[i].img + "')");
                     console.log(background);
                     setActualArtist(arrayDataShuffled[i].artist);
                     setActualSongname(arrayDataShuffled[i].name);
@@ -401,7 +400,6 @@ const Dialog1 = (props) => {
                     elderTimerArray.push(arrayDataShuffled[i - 1].time);
                     setTimeout(() => {
                         setActualMusic(audioTune);
-                        setBackground("url('" + arrayDataShuffled[i].img + "')");
                         setActualArtist(arrayDataShuffled[i].artist);
                         setActualSongname(arrayDataShuffled[i].name);
                         console.log(
@@ -503,25 +501,6 @@ const Dialog1 = (props) => {
         audioTuneToPlay.volume = 0.3;
     };
 
-    const sidebarJob = () => {
-        console.log('sidebarJob')
-        if (sidebar == true) {
-            setSidebar(false);
-        } else {
-            setSidebar(true);
-        }
-    };
-
-    const chatJob = () => {
-        console.log('chatJob')
-        if (chat == true) {
-            console.log('false')
-            setChat(false);
-        } else {
-            console.log('true')
-            setChat(true);
-        }
-    };
 
     var classes = props.show ? 'Dialog1' : 'Dialog1 hidden';
     if (screenType == "big") {
@@ -531,17 +510,16 @@ const Dialog1 = (props) => {
                 id="test"
                 className={classes} style={styles} onMouseDown={_dragStart} onMouseMove={_dragging} onMouseUp={_dragEnd}
             >
-                <div classes={DialogTitle} style={{ borderBottom: '4px solid #FFEB01' }}>
+                <div classes={DialogTitle} style={{ borderBottom: '4px solid #0BFD67' }}>
                     <marquee
                         behavior="scroll"
                         style={{
                             marginLeft: "15px",
                             marginRight: "15px",
-                            fontFamily: "courrier-new",
                             fontSize: "25px",
                             fontWeight: "50",
-                            color: '#FFEB01',
-                            fontFamily: 'Enriqueta'
+                            color: '#0BFD67',
+                            fontFamily: 'system-ui'
                         }}
                     >
                         SONG {actualSongname.toUpperCase()} FROM {actualArtist.toUpperCase()}
@@ -549,15 +527,15 @@ const Dialog1 = (props) => {
                 </div>
                 <Grid container spacing={0}>
                     <Grid item xs={2}>
-                        <div style={{ color: '#FFEB01', marginTop: '15px' }} onClick={props.onClose}>
-                            <CloseIcon style={{ border: '2px solid #FFEB01' }} />
+                        <div style={{ color: '#0BFD67', marginTop: '15px' }} onClick={props.onClose}>
+                            <CloseIcon style={{ border: '2px solid #0BFD67' }} />
                         </div>
                     </Grid>
                     <Grid item xs={8}>
                         <Grid container spacing={0}>
                             <Grid item xs={12}>
                                 <IOSSlider
-                                    style={{ marginTop: '15px', color: '#FFEB01' }}
+                                    style={{ marginTop: '15px', color: '#0BFD67' }}
                                     value={typeof value === "number" ? value : 0}
                                     onChange={handleSliderChange}
                                     aria-label="ios slider"
@@ -576,7 +554,7 @@ const Dialog1 = (props) => {
                                 onClick={playSound}
                             >
                                 {/* <VolumeOffIcon style={{ fontSize: "110px", color: 'white'}}  /> */}
-                                <PlayArrowIcon style={{ color: '#FFEB01', fontSize: '50px', height: '60px' }} />
+                                <PlayArrowOutlinedIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
                             </button>
                         )}
                         {showPlayOrPause == "second" && (
@@ -586,11 +564,11 @@ const Dialog1 = (props) => {
                             >
                                 {/* <VolumeUpIcon style={{ fontSize: "110px" }} /> */}
                                 {wait == false && (
-                                    <StopIcon style={{ color: '#FFEB01', fontSize: '50px', height: '60px' }} />
+                                    <StopIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
                                 )}
                                 {wait == true && (
                                     <p
-                                        style={{ color: '#FFEB01' }}
+                                        style={{ color: '#0BFD67' }}
                                     >
                                         Turning on...
                                     </p>
@@ -604,7 +582,7 @@ const Dialog1 = (props) => {
                                 style={{ background: 'transparent', border: 'none' }}
                             >
                                 {/* <VolumeOffIcon style={{ fontSize: "110px" }} /> */}
-                                <PlayArrowIcon style={{ color: '#FFEB01', fontSize: '50px', height: '60px' }} />
+                                <PlayArrowOutlinedIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
                             </button>
                         )}
                     </Grid>

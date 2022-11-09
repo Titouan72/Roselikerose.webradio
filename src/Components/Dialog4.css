@@ -1,22 +1,20 @@
-.Dialog2 {
-    width: 500px;
-    height: 245px;
-    background-color: black;
-    border: 4px solid #0BFD67;
+.Dialog4 {
+    width: 210px;
+    height: 70px;
+    background-color: #000000;
     position: absolute;
     cursor: move;
-    top: 450px;
-    left: 800px;
-    font-family: 'system-ui';
+    top: 550px;
+    left: 150px;
 }
+
 .hidden {
     display: none;
 }
 
-.DialogTitle2 {
-
-    border-bottom: 4px solid #0BFD67;
-    background-color: #000000;
+.DialogTitle4 {
+    border: 4px solid #0BFD67;
+    background-color: black;
     color: #0BFD67;
     font-family: 'system-ui';
     color: 'white';
@@ -26,9 +24,12 @@
     font-weight: 50;
 }
 
-.Contents {
-    padding-top: 50px;
-    padding-bottom: 200px;
+.Contents4 {
+    padding: 10px;
+    color: #0BFD67;
+    text-justify:newspaper;
+    text-align: justify;
+    font-size: 12px;
 }
 
 .closeButton {
