@@ -4,8 +4,8 @@
     background-color: #000000;
     position: absolute;
     cursor: move;
-    top: 550px;
-    left: 150px;
+    top: 25%;
+    left: 10%;
 }
 
 .hidden {

@@ -5,8 +5,8 @@
     border: 4px solid #0BFD67;
     position: absolute;
     cursor: move;
-    top: 450px;
-    left: 800px;
+    top: 53%;
+    left: 55%;
     font-family: 'system-ui';
 }
 .hidden {
