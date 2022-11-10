@@ -1,7 +1,7 @@
 
 import './Dialog1.css';
 import Dialog5 from './Dialog5';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
@@ -17,11 +17,13 @@ import { styled } from '@mui/material/styles';
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined';
 
 const Dialog1 = (props) => {
+
     var hScreen = window.innerHeight;
     var wScreen = window.innerWidth;
     var rdmNb = Math.floor(Math.random() * 3);
     var defaultBg =
         "https://musiquetechapp.s3.eu-west-1.amazonaws.com/img_" + rdmNb + ".jpg";
+    const [count, setCount] = useState(true);
     const [playInLoop, setPlayInLoop] = useState(true);
     const [valueTime, setValueTime] = React.useState("05:00");
     const [value, setValue] = React.useState(30);
@@ -89,6 +91,8 @@ const Dialog1 = (props) => {
     const _dragEnd = () => {
         setDragging(false)
     }
+
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     const audioTuneToPlay = actualMusic;
     console.log(audioTuneToPlay)
@@ -130,6 +134,7 @@ const Dialog1 = (props) => {
         for (let i = 0; i < data.length; i++) {
             timerArray.push(data[i].time);
         }
+        console.log('data', data)
         var arrayDataShuffled = data.sort(() => Math.random() - 0.5);
         setActualArtist(arrayDataShuffled[0].artist);
         setActualSongname(arrayDataShuffled[0].name);
@@ -150,18 +155,19 @@ const Dialog1 = (props) => {
                     setActualArtist(arrayDataShuffled[i].artist);
                     setActualSongname(arrayDataShuffled[i].name);
                     setActualSonglink(arrayDataShuffled[i].file);
-                    console.log(
-                        "playing " +
-                        arrayDataShuffled[i].name +
-                        " from " +
-                        arrayDataShuffled[i].artist
-                    );
-                    setTimeout(() => {
-                        if (actualMusic != undefined) {
-                           document.getElementById('clickStart').click()
-                           console.log('clicked')
-                        } 
-                       }, 300);
+                    setCount(false);
+                    /*                     console.log(
+                                            "playing " +
+                                            arrayDataShuffled[i].name +
+                                            " from " +
+                                            arrayDataShuffled[i].artist
+                                        );
+                                        setTimeout(() => {
+                                            if (actualMusic != undefined) {
+                                               document.getElementById('clickStart').click()
+                                               console.log('clicked')
+                                            } 
+                                           }, 300); */
                 }
                 if (i != 0) {
                     elderTimer = elderTimerArray.reduce((a, b) => {
@@ -276,9 +282,9 @@ const Dialog1 = (props) => {
         return (
             <>
                 {actualMusic != undefined ? (
-                <Dialog5 show={true} songToPlay={actualSonglink} songName={actualSongname} key={actualSonglink}/>
+                    <Dialog5 show={true} songToPlay={actualSonglink} songName={actualSongname} key={actualSonglink} count={count}/>
                 ) : (
-                <>TItouan</>
+                    <>TItouan</>
                 )}
 
                 <div
