@@ -1,244 +1,6 @@
 
 import './Dialog1.css';
-
-
-/* export default class Dialog1 extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            diffX: 0,
-            diffY: 0,
-            dragging: false,
-            styles: {},
-            value: 30,
-            actualMusic: null,
-            wait: false,
-            rec: false,
-            actualArtist: 'Unknown',
-            actualSongName: 'Unknown',
-            showPlayOrPause: 'first'
-        }
-
-        this._dragStart = this._dragStart.bind(this);
-        this._dragging = this._dragging.bind(this);
-        this._dragEnd = this._dragEnd.bind(this);
-        this.playSound = this.playSound.bind(this);
-        this.muteSound = this.muteSound.bind(this);
-        this.resumeSound = this.resumeSound.bind(this);
-        this.handleSliderChange = this.handleSliderChange.bind(this);
-    }
-
-    _dragStart(e) {
-        this.setState({
-            diffX: e.screenX - e.currentTarget.getBoundingClientRect().left,
-            diffY: e.screenY - e.currentTarget.getBoundingClientRect().top,
-            dragging: true
-        });
-    }
-
-    _dragging(e) {
-
-        if (this.state.dragging) {
-            var left = e.screenX - this.state.diffX;
-            var top = e.screenY - this.state.diffY;
-
-            this.setState({
-                styles: {
-                    left: left,
-                    top: top
-                }
-            });
-        }
-    }
-
-    _dragEnd() {
-        this.setState({
-            dragging: false
-        });
-    }
-
-    /////////////////////////////////////
-
-    async componentDidMount() {
-        const data = await axios.get(
-            "https://rkzg4yhvcf.execute-api.eu-west-1.amazonaws.com/default/fetchDynamoDBData"
-        );
-        this.setState({
-            data: data.data,
-        });
-        this.setState({
-            audioTuneToPlay: this.state.actualMusic,
-        });
-        if (this.state.audioTuneToPlay != null) {
-            //audioTuneToPlay.currentTime = 200
-            this.state.audioTuneToPlay.play();
-        }
-
-    }
-
-    handleSliderChange(event, newValue) {
-        this.setState({ volume: parseFloat(newValue / 100), value: newValue })
-        this.state.audioTuneToPlay.volume = newValue / 100;
-    };
-
-    playSound() {
-        this.setState({ wait: true, showPlayOrPause: 'second' })
-        var timerArray = [];
-        var timer;
-        var timerFor;
-        var elderTimerArray = [0];
-        var elderTimer;
-        for (let i = 0; i < this.state.data.length; i++) {
-            timerArray.push(this.state.data[i].time);
-        }
-        var arrayDataShuffled = this.state.data.sort(() => Math.random() - 0.5);
-        this.setState({ actualSongname: arrayDataShuffled[0].artist, actualSongname: arrayDataShuffled[0].name })
-        elderTimerArray.push(13);
-
-        for (let x = 0; x < 10; x++) {
-            for (let i = 0; i < arrayDataShuffled.length; i++) {
-                timer = timerArray.reduce((a, b) => {
-                    return a + b;
-                });
-                console.log(timer * 1000);
-                const audioTune = new Audio(arrayDataShuffled[i].file);
-                audioTune.load();
-
-                if (i == 0) {
-                    this.setState({ actualMusic: audioTune, actualArtist: arrayDataShuffled[i].artist, actualArtist: arrayDataShuffled[i].name })
-                    console.log(
-                        "playing " +
-                        arrayDataShuffled[i].name +
-                        " from " +
-                        arrayDataShuffled[i].artist
-                    );
-                    audioTune.play();
-                }
-                if (i != 0) {
-                    elderTimer = elderTimerArray.reduce((a, b) => {
-                        return a + b;
-                    });
-                    timerFor = elderTimer + arrayDataShuffled[i - 1].time;
-                    elderTimerArray.push(arrayDataShuffled[i - 1].time);
-                    setTimeout(() => {
-                        this.setState({ actualMusic: audioTune, actualArtist: arrayDataShuffled[i].artist, actualArtist: arrayDataShuffled[i].name })
-                        console.log(
-                            "playing " +
-                            arrayDataShuffled[i].name +
-                            " from " +
-                            arrayDataShuffled[i].artist
-                        );
-                        audioTune.play();
-                    }, timerFor * 1000);
-                }
-            }
-        }
-        setTimeout(() => {
-            this.setState({ wait: false, rec: true })
-        }, 7000);
-    };
-
-    muteSound() {
-        this.setState({ showPlayOrPause: 'third', volume: 0 })
-        this.state.audioTuneToPlay.volume = 0;
-    };
-    resumeSound() {
-        this.setState({ showPlayOrPause: 'second', volume: 0.3 })
-        this.state.audioTuneToPlay.volume = 0.3;
-    };
-
-    render() {
-        var classes = this.props.show ? 'Dialog1' : 'Dialog1 hidden';
-        return (
-            <div className={classes} style={this.state.styles} onMouseDown={this._dragStart} onMouseMove={this._dragging} onMouseUp={this._dragEnd}>
-                <div className='DialogTitle'>
-                    <marquee
-                        behavior="scroll"
-                        style={{
-                            marginLeft: "15px",
-                            marginRight: "15px",
-                            fontFamily: "system-ui",
-                            fontSize: "25px",
-                            fontStyle: "italic",
-                            fontWeight: "900",
-                            borderBoottom: '3px solid grey'
-                        }}
-                    >
-                        Song {this.state.actualSongname} from {this.state.actualArtist}
-                    </marquee>
-                </div>
-                {this.state.showPlayOrPause == "first" && (
-                    <button
-                        style={{
-                        }}
-                        id="work"
-
-                        class="buttonNeon"
-                        onClick={this.playSound}
-                    >
-
-                        <p
-                            class="buttonNeon"
-                            style={{
-                            }}
-                        >
-                            TURNED OFF
-                        </p>
-                    </button>
-                )}
-                {this.state.showPlayOrPause == "second" && (
-                    <button
-                        style={{
-                        }}
-                        onClick={this.muteSound}
-                    >
-
-                        {this.state.wait == false && (
-                            <p
-                                class="buttonNeon"
-                                style={{
-                                }}
-                            >
-                                TURNED ON
-                            </p>
-                        )}
-                        {this.state.wait == true && (
-                            <p
-                                style={{
-                                }}
-                            >
-                                Turning on...
-                            </p>
-                        )}
-                    </button>
-                )}
-                {this.state.showPlayOrPause == "third" && (
-                    <button
-                        style={{
-                        }}
-                        id="work"
-                        onClick={this.resumeSound}
-                    >
-
-                        <p
-                            class="buttonNeon"
-                            style={{
-                            }}
-                        >
-                            TURNED OFF
-                        </p>
-                    </button>
-                )}
-                <div className='closeButton' onClick={this.props.onClose}>
-                    Close
-                </div>
-            </div>
-        );
-    }
-} */
-
-
+import Dialog5 from './Dialog5';
 import React, { useState, useEffect } from "react";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 import Grid from "@mui/material/Grid";
@@ -278,7 +40,9 @@ const Dialog1 = (props) => {
     const [fastSeeker, setFastSeeker] = React.useState();
     const [actualArtist, setActualArtist] = React.useState("Unknown");
     const [actualSongname, setActualSongname] = React.useState("Unknown");
+    const [actualSonglink, setActualSonglink] = React.useState("Unknown");
     const [styles, setStyles] = React.useState({});
+    const [showDialog5, setShowDialog5] = React.useState(true);
     const [background, setBackground] = React.useState(
         "url('" + defaultBg + "')"
     );
@@ -385,12 +149,19 @@ const Dialog1 = (props) => {
                     console.log(background);
                     setActualArtist(arrayDataShuffled[i].artist);
                     setActualSongname(arrayDataShuffled[i].name);
+                    setActualSonglink(arrayDataShuffled[i].file);
                     console.log(
                         "playing " +
                         arrayDataShuffled[i].name +
                         " from " +
                         arrayDataShuffled[i].artist
                     );
+                    setTimeout(() => {
+                        if (actualMusic != undefined) {
+                           document.getElementById('clickStart').click()
+                           console.log('clicked')
+                        } 
+                       }, 300);
                 }
                 if (i != 0) {
                     elderTimer = elderTimerArray.reduce((a, b) => {
@@ -402,6 +173,7 @@ const Dialog1 = (props) => {
                         setActualMusic(audioTune);
                         setActualArtist(arrayDataShuffled[i].artist);
                         setActualSongname(arrayDataShuffled[i].name);
+                        setActualSonglink(arrayDataShuffled[i].file);
                         console.log(
                             "playing " +
                             arrayDataShuffled[i].name +
@@ -489,7 +261,6 @@ const Dialog1 = (props) => {
         },
     }));
 
-
     const muteSound = async () => {
         await setShowPlayOrPause("third");
         await setVolume(0);
@@ -500,95 +271,99 @@ const Dialog1 = (props) => {
         await setVolume(0.3);
         audioTuneToPlay.volume = 0.3;
     };
-
-
     var classes = props.show ? 'Dialog1' : 'Dialog1 hidden';
     if (screenType == "big") {
         return (
-            <div
-                onLoad={checkScreenSize}
-                id="test"
-                className={classes} style={styles} onMouseDown={_dragStart} onMouseMove={_dragging} onMouseUp={_dragEnd}
-            >
-                <div classes={DialogTitle} style={{ borderBottom: '4px solid #0BFD67' }}>
-                    <marquee
-                        behavior="scroll"
-                        style={{
-                            marginLeft: "15px",
-                            marginRight: "15px",
-                            fontSize: "25px",
-                            fontWeight: "50",
-                            color: '#0BFD67',
-                            fontFamily: 'system-ui'
-                        }}
-                    >
-                        SONG {actualSongname.toUpperCase()} FROM {actualArtist.toUpperCase()}
-                    </marquee>
-                </div>
-                <Grid container spacing={0}>
-                    <Grid item xs={2}>
-                        <div style={{ color: '#0BFD67', marginTop: '15px' }} onClick={props.onClose}>
-                            <CloseIcon style={{ border: '2px solid #0BFD67' }} />
-                        </div>
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Grid container spacing={0}>
-                            <Grid item xs={12}>
-                                <IOSSlider
-                                    style={{ marginTop: '15px', color: '#0BFD67' }}
-                                    value={typeof value === "number" ? value : 0}
-                                    onChange={handleSliderChange}
-                                    aria-label="ios slider"
-                                    valueLabelDisplay="on"
-                                    marks={marks}
-                                />
+            <>
+                {actualMusic != undefined ? (
+                <Dialog5 show={true} songToPlay={actualSonglink} songName={actualSongname} key={actualSonglink}/>
+                ) : (
+                <>TItouan</>
+                )}
+
+                <div
+                    onLoad={checkScreenSize}
+                    id="test"
+                    className={classes} style={styles} onMouseDown={_dragStart} onMouseMove={_dragging} onMouseUp={_dragEnd}
+                >
+                    <div classes={DialogTitle} style={{ borderBottom: '4px solid #0BFD67' }}>
+                        <marquee
+                            behavior="scroll"
+                            style={{
+                                marginLeft: "15px",
+                                marginRight: "15px",
+                                fontSize: "25px",
+                                fontWeight: "50",
+                                color: '#0BFD67',
+                                fontFamily: 'system-ui'
+                            }}
+                        >
+                            SONG {actualSongname.toUpperCase()} FROM {actualArtist.toUpperCase()}
+                        </marquee>
+                    </div>
+                    <Grid container spacing={0}>
+                        <Grid item xs={2}>
+                            <div style={{ color: '#0BFD67', marginTop: '15px' }} onClick={props.onClose}>
+                                <CloseIcon style={{ border: '2px solid #0BFD67' }} />
+                            </div>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Grid container spacing={0}>
+                                <Grid item xs={12}>
+                                    <IOSSlider
+                                        style={{ marginTop: '15px', color: '#0BFD67' }}
+                                        value={typeof value === "number" ? value : 0}
+                                        onChange={handleSliderChange}
+                                        aria-label="ios slider"
+                                        valueLabelDisplay="on"
+                                        marks={marks} />
+                                </Grid>
                             </Grid>
                         </Grid>
+                        <Grid item xs={2}>
+                            {showPlayOrPause == "first" && (
+                                <button
+                                    id="work"
+                                    style={{ background: 'transparent', border: 'none' }}
+                                    class="buttonNeon"
+                                    onClick={playSound}
+                                >
+                                    {/* <VolumeOffIcon style={{ fontSize: "110px", color: 'white'}}  /> */}
+                                    <PlayArrowOutlinedIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
+                                </button>
+                            )}
+                            {showPlayOrPause == "second" && (
+                                <button
+                                    style={{ background: 'transparent', border: 'none' }}
+                                    onClick={muteSound}
+                                >
+                                    {/* <VolumeUpIcon style={{ fontSize: "110px" }} /> */}
+                                    {wait == false && (
+                                        <StopIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
+                                    )}
+                                    {wait == true && (
+                                        <p
+                                            style={{ color: '#0BFD67' }}
+                                        >
+                                            Turning on...
+                                        </p>
+                                    )}
+                                </button>
+                            )}
+                            {showPlayOrPause == "third" && (
+                                <button
+                                    id="work"
+                                    onClick={resumeSound}
+                                    style={{ background: 'transparent', border: 'none' }}
+                                >
+                                    {/* <VolumeOffIcon style={{ fontSize: "110px" }} /> */}
+                                    <PlayArrowOutlinedIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
+                                </button>
+                            )}
+                        </Grid>
                     </Grid>
-                    <Grid item xs={2}>
-                        {showPlayOrPause == "first" && (
-                            <button
-                                id="work"
-                                style={{ background: 'transparent', border: 'none' }}
-                                class="buttonNeon"
-                                onClick={playSound}
-                            >
-                                {/* <VolumeOffIcon style={{ fontSize: "110px", color: 'white'}}  /> */}
-                                <PlayArrowOutlinedIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
-                            </button>
-                        )}
-                        {showPlayOrPause == "second" && (
-                            <button
-                                style={{ background: 'transparent', border: 'none' }}
-                                onClick={muteSound}
-                            >
-                                {/* <VolumeUpIcon style={{ fontSize: "110px" }} /> */}
-                                {wait == false && (
-                                    <StopIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
-                                )}
-                                {wait == true && (
-                                    <p
-                                        style={{ color: '#0BFD67' }}
-                                    >
-                                        Turning on...
-                                    </p>
-                                )}
-                            </button>
-                        )}
-                        {showPlayOrPause == "third" && (
-                            <button
-                                id="work"
-                                onClick={resumeSound}
-                                style={{ background: 'transparent', border: 'none' }}
-                            >
-                                {/* <VolumeOffIcon style={{ fontSize: "110px" }} /> */}
-                                <PlayArrowOutlinedIcon style={{ color: '#0BFD67', fontSize: '50px', height: '60px' }} />
-                            </button>
-                        )}
-                    </Grid>
-                </Grid>
 
-            </div>
+                </div></>
         );
     }
     if (screenType == "normal") {

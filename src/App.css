@@ -2,7 +2,7 @@
   text-align: center;
 }
 body{
-  overflow: hidden;
+  background-color: #282c34;
 }
 .App-logo {
   height: 40vmin;
