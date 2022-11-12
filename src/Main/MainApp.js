@@ -28,6 +28,7 @@ export default class MainApp extends Component {
     componentDidMount() {
         var hScreen = window.innerHeight;
         var wScreen = window.innerWidth;
+        console.log(hScreen + ' ' + wScreen)
         this.setState({hScreen: hScreen, wScreen: wScreen})
     }
     _showDialog1() {
@@ -51,7 +52,7 @@ export default class MainApp extends Component {
 
 
     render() {
-if (this.state.hScreen < 768 || this.state.wScreen < 1370){
+if (this.state.hScreen < 658 && this.state.wScreen < 1162){
     return (
         <div className='MainApp'>
             <DialogMobile show={this.state.showDialogMobile} />

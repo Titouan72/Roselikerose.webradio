@@ -3,6 +3,7 @@
 }
 body{
   background-color: #282c34;
+  overflow: hidden;
 }
 .App-logo {
   height: 40vmin;
