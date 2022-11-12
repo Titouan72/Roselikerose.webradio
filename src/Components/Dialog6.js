@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import './Dialog3.css';
+import './Dialog6.css';
 import Grid from "@mui/material/Grid";
 import OpenWithIcon from '@mui/icons-material/OpenWith';
 
-export default class Dialog3 extends Component {
+export default class Dialog6 extends Component {
     constructor(props) {
         super(props);
 
@@ -19,7 +19,6 @@ export default class Dialog3 extends Component {
         this._dragging = this._dragging.bind(this);
         this._dragEnd = this._dragEnd.bind(this);
     }
-
 
     _dragStart(e) {
         this.setState({
@@ -56,25 +55,28 @@ export default class Dialog3 extends Component {
             zindex: 1
         })
     }
-//pls enjoy the music and contact me for information on my personal instagram (ps: dont hesitate to give me money): <a>https://www.instagram.com/roselikerose_/</a>
+
     render() {
-        var classes = this.props.show ? 'Dialog3' : 'Dialog3 hidden';
+        var classes = this.props.show ? 'Dialog6' : 'Dialog6 hidden';
         return (
             <div className={classes} style={this.state.styles} onMouseDown={this._dragStart} onMouseMove={this._dragging} onMouseUp={this._dragEnd}>
-                <div className='DialogTitle3'>
+                <div className='DialogTitle6'>
                     <Grid container spacing={0}>
-                        <Grid item xs={1} style={{ paddingTop: '5px' }}>
+                        <Grid item xs={1} style={{ paddingTop: '5px', paddingLeft: '5px' }}>
                             <OpenWithIcon />
                         </Grid>
                         <Grid item xs={11}>
-                            WHOAMI?
+                            HAHAHXDD2
                         </Grid>
-                    </Grid>
-                </div>
+                    </Grid></div>
 
-                <div className='Contents3'>
-                    This webradio is a project for my personal experience on react.js and AWS. This is a webradio just for lover of underground weird techno music, such as terrorcore, breakcore, frenchcore... <br/> This is the <strong>first</strong> release of this webradio, this one will get soon update (online chat, programmation, new dialog boxes). 
-                </div>
+                <img src="https://musiquetechapp.s3.eu-west-1.amazonaws.com/pi.png"
+                    style={{
+                        position: 'relative',
+                        top: '-10 %',
+                        bottom: '0%',
+                        width: '100%'
+                    }}></img>
             </div>
         );
     }

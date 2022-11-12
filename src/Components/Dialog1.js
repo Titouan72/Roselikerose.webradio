@@ -21,6 +21,7 @@ const Dialog1 = (props) => {
     var hScreen = window.innerHeight;
     var wScreen = window.innerWidth;
     var rdmNb = Math.floor(Math.random() * 3);
+    const [zindex, setZIndex] = React.useState(9999);
     var defaultBg =
         "https://musiquetechapp.s3.eu-west-1.amazonaws.com/img_" + rdmNb + ".jpg";
     const [count, setCount] = useState(true);
@@ -83,13 +84,21 @@ const Dialog1 = (props) => {
             var top = e.screenY - diffY;
             setStyles({
                 left: left,
-                top: top
+                top: top,
+                zIndex: zindex
             })
         }
     }
 
-    const _dragEnd = () => {
+    const _dragEnd = (e) => {
         setDragging(false)
+        var left = e.screenX - diffX;
+        var top = e.screenY - diffY;
+        setStyles({
+            left: left,
+            top: top,
+            zIndex: 6
+        })
     }
 
 
@@ -304,20 +313,16 @@ const Dialog1 = (props) => {
                                 fontFamily: 'system-ui'
                             }}
                         >
-                            SONG {actualSongname.toUpperCase()} FROM {actualArtist.toUpperCase()}
+                            SONG {actualArtist.toUpperCase()} FROM {actualSongname.toUpperCase()}
                         </marquee>
                     </div>
                     <Grid container spacing={0}>
-                        <Grid item xs={2}>
-                            <div style={{ color: '#0BFD67', marginTop: '15px' }} onClick={props.onClose}>
-                                <CloseIcon style={{ border: '2px solid #0BFD67' }} />
-                            </div>
-                        </Grid>
-                        <Grid item xs={8}>
+
+                        <Grid item xs={10}>
                             <Grid container spacing={0}>
                                 <Grid item xs={12}>
                                     <IOSSlider
-                                        style={{ marginTop: '15px', color: '#0BFD67' }}
+                                        style={{ marginTop: '15px', color: '#0BFD67', marginLeft: '15px', marginRight: '60px' }}
                                         value={typeof value === "number" ? value : 0}
                                         onChange={handleSliderChange}
                                         aria-label="ios slider"

@@ -1,4 +1,4 @@
-.Dialog1 {
+.DialogMobile {
     width: 500px;
     height: 100px;
     background-color: black;
@@ -15,11 +15,11 @@
     display: none;
 }
 
-.DialogTitle {
+.DialogMobileTitle {
     font-weight: bold;
     padding-top: 10px;
     padding-bottom: 10px;
-    border-bottom: 4px solid #0BFD67;
+    border-bottom: 4px solid #af2f2f;
     font-family: 'system-ui';
 }
 
@@ -28,14 +28,16 @@
     padding-bottom: 200px;
 }
 
-.closeButton {
-    font-size: 12px;
-    width: 100px;
-    color: black;
-    border: 2px solid #0BFD67;
-    border-radius: 25px;
-    padding: 10px;
-    margin: 10px;
-    margin-left: 140px;
-    cursor: pointer;
+.Title9 {
+    font-weight: thin;
+    font-size: 35px;
+    padding: 30px;
+    color: white;
+    font-family: 'system-ui';
+    text-align: left;
+    color: #af2f2f;
+    font-weight: 100;
+    padding-left: 20px;
+    
+    text-align: justify;
 }

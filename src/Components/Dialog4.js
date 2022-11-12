@@ -11,7 +11,8 @@ export default class Dialog4 extends Component {
             diffX: 0,
             diffY: 0,
             dragging: false,
-            styles: {}
+            styles: {},
+            zindex: 9999
         }
 
         this._dragStart = this._dragStart.bind(this);
@@ -36,16 +37,23 @@ export default class Dialog4 extends Component {
             this.setState({
                 styles: {
                     left: left,
-                    top: top
+                    top: top,
+                    zIndex: this.state.zindex
                 }
             });
         }
     }
-
-    _dragEnd() {
+    _dragEnd(e) {
         this.setState({
             dragging: false
         });
+        var left = e.screenX - this.state.diffX;
+        var top = e.screenY - this.state.diffY;
+        this.setState({
+            left: left,
+            top: top,
+            zindex: 1
+        })
     }
 
     render() {
@@ -62,7 +70,7 @@ export default class Dialog4 extends Component {
                         </Grid>
                     </Grid></div>
 
-                <img src="https://musiquetechapp.s3.eu-west-1.amazonaws.com/epic/smiley.png"
+                <img src="https://musiquetechapp.s3.eu-west-1.amazonaws.com/pi3.png"
                     style={{
                         position: 'relative',
                         top: '-10 %',

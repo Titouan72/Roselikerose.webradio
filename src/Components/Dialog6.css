@@ -1,11 +1,11 @@
-.Dialog3 {
-    width: 400px;
-    height: 180px;
+.Dialog6 {
+    width: 210px;
+    height: 70px;
     background-color: #000000;
     position: absolute;
     cursor: move;
-    top: 60%;
-    left: 30%;
+    top: 18%;
+    left: 16%;
     cursor: grab;
 }
 
@@ -13,10 +13,10 @@
     display: none;
 }
 
-.DialogTitle3 {
+.DialogTitle6 {
     border: 4px solid #0BFD67;
-    background-color: #0BFD67;
-    color: black;
+    background-color: black;
+    color: #0BFD67;
     font-family: 'system-ui';
     color: 'white';
     text-align: right;
@@ -25,7 +25,7 @@
     font-weight: 50;
 }
 
-.Contents3 {
+.Contents6 {
     padding: 10px;
     color: #0BFD67;
     text-justify:newspaper;
