@@ -52,7 +52,7 @@ export default class MainApp extends Component {
 
 
     render() {
-if (this.state.hScreen < 658 && this.state.wScreen < 1162){
+if (this.state.hScreen < 658 || this.state.wScreen < 1162){
     return (
         <div className='MainApp'>
             <DialogMobile show={this.state.showDialogMobile} />
